@@ -5,7 +5,8 @@ import java.util.Optional;
 import home.hello.entity.FileInfo;
 
 public interface FileInfoRepository {
-    public FileInfo save(FileInfo fileInfo);
-    public Optional<FileInfo> findById(String id);
+    public FileInfo insertFileInfo(FileInfo fileInfo);
+    public Optional<FileInfo> selectFileInfoById(String id);
+    public boolean deleteFileInfo(String id);
 
 }

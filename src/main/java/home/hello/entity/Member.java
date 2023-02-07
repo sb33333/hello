@@ -1,7 +1,5 @@
 package home.hello.entity;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,7 +12,8 @@ import lombok.Setter;
 public class Member {
 	@Id @Column
 	private String name;
-	private long credit;
+	private long miles;
+	
 	// private List<Achievement> achievement;
 	@Override
 	public int hashCode() {

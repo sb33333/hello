@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import home.hello.entity.Todo;
 import home.hello.entity.TodoId;
-import home.hello.entity.DateNumberSelector;
+import home.hello.entity.TodoKey;
 import jakarta.persistence.EntityManager;
 
 public class JpaTodoRepository implements TodoRepository{
@@ -16,43 +16,60 @@ public class JpaTodoRepository implements TodoRepository{
 	}
 
 	@Override
-	public List<Todo> findAll() {
-		return em.createQuery("select job from DailyJob job", Todo.class)
+	public List<Todo> selectTodos() {
+		return em.createQuery("select t from Todo t", Todo.class)
 		.getResultList();
 	}
 	@Override
-	public List<Todo> findByDate(LocalDate date) {
-		List<Todo> result = em.createQuery("select job from DailyJob job where job.date = :date", Todo.class)
+	public List<Todo> selectTodosByDate(LocalDate date) {
+		List<Todo> result = em.createQuery("select t from Todo t where t.date = :date", Todo.class)
 		.setParameter("date", date)
 		.getResultList();
 		return result;
 	}
 	@Override
-	public Optional<Todo> findById(TodoId id) {
+	public Optional<Todo> selectTodoById(TodoId id) {
 		Todo result = em.find(Todo.class, id);
 		return Optional.ofNullable(result);
 	}
 	@Override
-	public Todo save(LocalDate dateKey, Todo job) {
-		DateNumberSelector key = selectNewSequenceNumber(dateKey);
-		job.setId(key.createDailyJobId());
-		em.persist(job);
-		return job;
+	public Todo insertTodo(Todo todo) {
+		em.persist(todo);
+		return todo;
 	}
 
 	@Override
-	public DateNumberSelector selectNewSequenceNumber(LocalDate date) {
-		DateNumberSelector dateNumber = em.find(DateNumberSelector.class, LocalDate.now());
+	public TodoKey selectTodoKey(LocalDate date) {
+		TodoKey dateNumber = em.find(TodoKey.class, date);
 		if (dateNumber == null) {
-			dateNumber = new DateNumberSelector();
+			dateNumber = new TodoKey();
 			dateNumber.setDate(LocalDate.now());
 			dateNumber.setSequence(0);
-			em.persist(dateNumber);
 		} else {
 			dateNumber.setSequence(dateNumber.getSequence() + 1);
-			em.persist(dateNumber);
 		}
 		return dateNumber;
+	}
+	
+	@Override
+	public TodoKey saveTodoKey(TodoKey key) {
+		em.persist(key);
+		return key;
+	}
+
+	@Override
+	public Optional<Todo> selectTodo(Todo todo) {
+		return Optional.ofNullable(em.find(Todo.class, todo.getId()));
+	}
+
+	@Override
+	public boolean deleteTodo(TodoId id) {
+		Todo target = em.find(Todo.class, id);
+		if (target != null) {
+			em.remove(target);
+			return true;
+		}
+		return false;
 	}
 	
 }

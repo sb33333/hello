@@ -1,0 +1,28 @@
+#spring.datasource.url=jdbc:h2:tcp://127.0.0.1/~/h2/hello
+spring:
+    datasource:
+        driver-class-name: org.h2.Driver
+        username: sa
+        url: jdbc:h2:~/h2/hello
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                show_sql: true
+                format_sql: true
+    h2:
+        console:
+            enabled: true
+    servlet:
+        multipart:
+            enabled: true
+            file-size-threshold: 3MB
+            location: /home/namu/upload/temp
+            max-file-size: 100MB
+            max-request-size: 100MB
+
+hello:
+    file:
+        upload: /home/namu/upload/
+        removed: /home/namu/upload/removed/

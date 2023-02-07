@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import home.hello.entity.DateNumberSelector;
+import home.hello.entity.TodoKey;
 import jakarta.persistence.EntityManager;
 
 @DataJpaTest
@@ -18,9 +18,9 @@ class HelloApplicationTests {
 
 	@Test
 	void contextLoads() {
-		DateNumberSelector dateNumber = em.find(DateNumberSelector.class, LocalDate.now());
+		TodoKey dateNumber = em.find(TodoKey.class, LocalDate.now());
 		if (dateNumber == null) {
-			dateNumber = new DateNumberSelector();
+			dateNumber = new TodoKey();
 			dateNumber.setDate(LocalDate.now());
 			dateNumber.setSequence(0);
 			em.persist(dateNumber);

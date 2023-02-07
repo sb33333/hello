@@ -10,7 +10,7 @@ import home.hello.repository.JpaFileInfoRepository;
 import home.hello.repository.JpaTodoRepository;
 import home.hello.repository.TodoRepository;
 import home.hello.service.FileUploadService;
-import home.hello.service.TodoService;
+import home.hello.service.TodoServiceImpl;
 import jakarta.persistence.EntityManager;
 
 @Configuration
@@ -23,13 +23,13 @@ public class SpringConfig {
     }
 
     @Bean
-    public TodoRepository dailyJobRepository() {
+    public TodoRepository todoRepository() {
         return new JpaTodoRepository(em);
     }
 
     @Bean
-    public TodoService dailyJobService() {
-        return new TodoService(dailyJobRepository());
+    public TodoServiceImpl todoService() {
+        return new TodoServiceImpl(todoRepository());
     }
 
     @Bean

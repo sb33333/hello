@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko" class="h-100">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Cover Template · Bootstrap v5.3</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<!-- Favicons -->
+	<meta name="theme-color" content="#712cf9">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	
+		<style>
+		  .bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
+		  }
+	
+		  @media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+			  font-size: 3.5rem;
+			}
+		  }
+	
+		  .b-example-divider {
+			height: 3rem;
+			background-color: rgba(0, 0, 0, .1);
+			border: solid rgba(0, 0, 0, .15);
+			border-width: 1px 0;
+			box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+		  }
+	
+		  .b-example-vr {
+			flex-shrink: 0;
+			width: 1.5rem;
+			height: 100vh;
+		  }
+	
+		  .bi {
+			vertical-align: -.125em;
+			fill: currentColor;
+		  }
+	
+		  .nav-scroller {
+			position: relative;
+			z-index: 2;
+			height: 2.75rem;
+			overflow-y: hidden;
+		  }
+	
+		  .nav-scroller .nav {
+			display: flex;
+			flex-wrap: nowrap;
+			padding-bottom: 1rem;
+			margin-top: -1px;
+			overflow-x: auto;
+			text-align: center;
+			white-space: nowrap;
+			-webkit-overflow-scrolling: touch;
+		  }
+		</style>
+	
+		
+
+</head>
+<body class="bg-light">
+	<nav class="navbar sticky-top bg-body-tertiary">
+		<div class="container-fluid">
+		  <a class="navbar-brand mb-0 h1" href="#">Sticky top</a>
+		</div>
+	  </nav>
+	  <main class="" >
+		<div class="row" th:each="item, status: ${todo}" th:with="listSize=${#lists.size(item.attachedFiles)}">
+			<div class="col-12">
+				<div class="card">
+					<th:block th:if="${listSize == 0}">
+						<label for="fileAttach" th:data-date="${item.date}" th:data-seq="${item.sequence}" class="attachPhoto" style="cursor:pointer;height:5rem;text-align: center;line-height: 100%;"><i style="display:block;font-size:5rem;" class="bi bi-camera"></i></label>
+					</th:block>
+					<th:block th:unless="${listSize == 0}">
+						<div th:id="'todo' + ${status.index}" id="carouselExample" class="carousel slide" data-bs-touch="true">
+							<div class="carousel-inner" th:each="photo, status:${item.attachedFiles}">
+								<th:block th:if="${status.index == 0}">
+									<div style="height:5rem;" class="carousel-item text-center active">
+										<img style="height:inherit;" th:src="@{/file/{id}(id=${photo.id})}">
+									</div>
+								</th:block>
+								<th:block th:if="${status.index > 0 && status.index < listSize - 1}">
+									<div style="height:5rem;" class="carousel-item text-center">
+										<img style="height:inherit;" th:src="@{/file/{id}(id=${photo.id})}">
+									</div>
+								</th:block>
+								<th:block th:if="${status.index == listSize - 1}">
+									<div style="height:5rem;" class="carousel-item text-center">
+										<img style="height:inherit;" th:src="@{/file/{id}(id=${photo.id})}">
+									</div>
+									<div style="height:5rem;" class="carousel-item text-center">
+										<label for="fileAttach" th:data-date="${item.date}" th:data-seq="${item.sequence}" class="attachPhoto" style="cursor:pointer;height:5rem;text-align: center;line-height: 100%;"><i style="display:block;font-size:5rem;" class="bi bi-camera"></i></label>
+									</div>
+								</th:block>
+							</div>
+							<button class="carousel-control-prev" type="button" th:data-bs-target="'#todo' + ${status.index}" data-bs-target="#carouselExample" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" th:data-bs-target="'#todo' + ${status.index}" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
+					</th:block>
+					<!-- <img src="/static/images/noname.png" style="height:200px" class="card-img-top img-thumbnail" alt="..."> -->
+					<div class="card-body">
+						<i style="color:blue" class="bi bi-circle-half"></i><i class="bi bi-check-circle-fill"></i><i class="bi bi-circle"></i>
+						<h6 class="card-title" th:text="${item.title}">
+							Card title
+						</h6>
+						<p class="card-text" th:text="${item.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						<button th:data-date="${item.date}" th:data-seq="${item.sequence}" href="javascript:completeTodo(this)" class="btn btn-primary btn-sm">Go somewhere</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		
+	  </main>
+	<!-- static -->
+	<input type="file" style="display:none;" id="fileAttach" multiple="multiple" onchange="sendFile(this)">
+	<!-- static -->
+
+
+<script>
+	const completeTodo = function(button) {
+		console.log(button);
+		url = "/todo/" + button.dataset.date + "/" + button.dataset.seq;
+		fetch(url, {
+			method: "PATCH"
+		}).then(res=>res.json()).then(result=>console.log(result));
+	}
+	
+	document.querySelector("main").addEventListener("click", function(event){
+		console.log(event.target.classList);
+		if (event.target.classList.contains("attachPhoto")) {
+			const parent = event.target.parentNode;
+			const fileInput = document.querySelector("#fileAttach");
+			fileInput.dataset.date = parent.dataset.date;
+			fileInput.dataset.seq = parent.dataset.seq;
+
+		}
+	});
+	const sendFile = function (input) {
+		if (input.files.length === 0) {
+			return false;
+		}
+		const url = "/todo/" + input.dataset.date + "/" + input.dataset.seq + "/file";
+		const formData = new FormData();
+		for (let i = 0; i < input.files.length; i++) {
+			formData.append("uploadFiles", input.files[i])
+		}
+		fetch(url, {
+			method: "POST"
+			, headers: {}
+			, body: formData
+		}).then(res=>res.json()).then(function(result) {
+			if (result.attachedFiles === null || result.attachedFiles === undefined ) {
+				return false;
+			}
+			const returnedFileList = result.attachedFiles;
+
+		});
+	}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>	
+</body>
+</html>

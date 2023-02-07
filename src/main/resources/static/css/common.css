@@ -1,0 +1,8 @@
+@font-face{
+    font-family: "KoPub_World_Batang";
+    src: url("/fonts/KoPubWorld Batang Medium.ttf") format("truetype")
+}
+
+* {
+    font-family: "KoPub_World_Batang";
+}

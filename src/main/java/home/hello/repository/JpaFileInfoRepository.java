@@ -12,14 +12,23 @@ public class JpaFileInfoRepository implements FileInfoRepository {
 		this.em = em;
 	}
     @Override
-    public Optional<FileInfo> findById(String id) {
+    public Optional<FileInfo> selectFileInfoById(String id) {
         return Optional.ofNullable(em.find(FileInfo.class, id));
     }
 
     @Override
-    public FileInfo save(FileInfo fileInfo) {
+    public FileInfo insertFileInfo(FileInfo fileInfo) {
         em.persist(fileInfo);
         return fileInfo;
+    }
+    @Override
+    public boolean deleteFileInfo(String id) {
+        FileInfo target = em.find(FileInfo.class, id);
+        if (em.contains(target)) {
+            em.remove(target);
+            return false;
+        }
+        return false;
     }
     
     
